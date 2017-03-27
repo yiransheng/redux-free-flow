@@ -15,6 +15,24 @@ export const FreePrototype = {
       }
     });
   },
+  _expand() {
+    return match(this, {
+      Pure: () => this,
+      Impure: () => this,
+      FlatMap([functor, ...fns]) {
+        return Impure(
+          functor.map(val => {
+            let result = val;
+            for (let i = 0; i < fns.length; i++) {
+              result = result.then(fns[i]);
+              result = result._expand();
+            }
+            return result;
+          })
+        );
+      }
+    });
+  },
   map(f) {
     return this.then(compose(Pure, f));
   }

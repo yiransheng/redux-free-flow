@@ -6,18 +6,8 @@ const interpreteDispatch = store => {
   const run = freeDsl => {
     const result = match(freeDsl, {
       Pure: x => x,
-      FlatMap([dsl, ...fns]) {
-        return run(
-          Impure(
-            dsl.map(x => {
-              let result = x;
-              for (let i = 0; i < fns.length; i++) {
-                result = result.then(fns[i]);
-              }
-              return result;
-            })
-          )
-        );
+      FlatMap() {
+        return  run(freeDsl._expand());
       },
       Impure: dsl => match(dsl, {
         End: () => null,
