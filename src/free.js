@@ -9,7 +9,10 @@ export const FreePrototype = {
   then(f) {
     return match(this, {
       Pure: f,
-      Impure: functor => Impure(functor.map(v => v.then(f)))
+      Impure: functor => FlatMap(functor, f),
+      FlatMap([functor, ...fns]) {
+        return FlatMap(functor, ...fns, f);
+      }
     });
   },
   map(f) {
@@ -22,6 +25,7 @@ const assign = Object.assign;
 
 const Pure = val => assign(create(), { Pure: val });
 const Impure = val => assign(create(), { Impure: val });
+const FlatMap = (val, ...fns) => assign(create(), { FlatMap: [val, ...fns] });
 
 const isFree = value => Object(value) === value && value[isFreeSymbol];
 
