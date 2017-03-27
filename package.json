@@ -1,0 +1,32 @@
+{
+  "name": "redux-free",
+  "version": "0.0.1",
+  "description": "Free Monad Action Creators",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/yiransheng/redux-free.git"
+  },
+  "keywords": [
+    "free-monad",
+    "redux",
+    "middleware",
+    "side-effect",
+    "composable"
+  ],
+  "author": "Yiran Sheng",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/yiransheng/redux-free/issues"
+  },
+  "homepage": "https://github.com/yiransheng/redux-free#readme",
+  "dependencies": {
+    "single-key": "^1.0.0"
+  },
+  "devDependencies": {
+    "redux": "^3.6.0"
+  }
+}
