@@ -8,13 +8,19 @@ const unit = null;
 
 test("free monad to represent Nested List", t => {
   t.plan(1);
-  // List functor -> Free Monad
   const fromArrayOrElement = xs => {
     return Array.isArray(xs) ? Impure(xs.map(fromArrayOrElement)) : Pure(xs);
   };
-  const free = fromArrayOrElement([0, [1, [2, 3]], [4, [5, [6, 7]]]]);
-  const recover = free => match(free, {
+  const array = [0, [1, [2, 3]], [4, [5, [6, 7]]]];
+  const free = fromArrayOrElement(array);
+  const recover = m => match(m, {
     Pure : id,
-    Impure
+    Impure:(xs) => {
+      return xs.map(recover);
+    },
+    FlatMap : () => {
+      return resover(free._expand());
+    }
   });
+  t.deepEqual(array, recover(free));
 });
