@@ -1,3 +1,6 @@
 {
-  "presets": ["es2015", "stage-0"]
+  "presets": [
+    { "plugins" : ["closure-elimination"] },
+    "es2015"
+  ] 
 }

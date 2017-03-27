@@ -1,4 +1,4 @@
-import { Do, Pure, Impure, liftFree } from "../src/free";
+import { Do, Pure, Impure as _Impure, liftFree } from "../src/free";
 import { compose } from "redux";
 import { match } from "single-key";
 import test from "tape";
@@ -9,16 +9,16 @@ const unit = null;
 test("free monad to represent Nested List", t => {
   t.plan(1);
   const fromArrayOrElement = xs => {
-    return Array.isArray(xs) ? Impure(xs.map(fromArrayOrElement)) : Pure(xs);
+    return Array.isArray(xs) ? _Impure(xs.map(fromArrayOrElement)) : Pure(xs);
   };
   const array = [0, [1, [2, 3]], [4, [5, [6, 7]]]];
   const free = fromArrayOrElement(array);
   const recover = m => match(m, {
     Pure : id,
-    Impure:(xs) => {
+    Impure (xs) {
       return xs.map(recover);
     },
-    FlatMap : () => {
+    FlatMap () {
       return resover(free._expand());
     }
   });

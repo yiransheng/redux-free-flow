@@ -5,7 +5,6 @@
   "main": "lib/index.js",
   "jsnext:main": "src/index.js",
   "scripts": {
-    "test": "tape -r babel-polyfill -r babel-register './test/*.test.js'",
     "clean": "rimraf lib",
     "build": "babel src --out-dir lib",
     "test": "tape -r babel-polyfill -r babel-register './test/*.test.js'",
