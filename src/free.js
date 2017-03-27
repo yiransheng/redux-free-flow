@@ -13,7 +13,7 @@ export const FreePrototype = {
     });
   },
   map(f) {
-    return this.map(compose(Pure, f));
+    return this.then(compose(Pure, f));
   }
 };
 

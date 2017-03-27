@@ -12,9 +12,9 @@ test("free monad to represent Nested List", t => {
   const fromArrayOrElement = xs => {
     return Array.isArray(xs) ? Impure(xs.map(fromArrayOrElement)) : Pure(xs);
   };
-  const free = fromArrayOrElement([1, [2, [3, 4]], [5, [6, [7, 8]]]]);
+  const free = fromArrayOrElement([0, [1, [2, 3]], [4, [5, [6, 7]]]]);
   t.deepEqual(
-    JSON.parse(JSON.stringify(free)),
+    JSON.parse(JSON.stringify(free.map(x => x + 1))),
     {
       Impure: [
         { Pure: 1 },
