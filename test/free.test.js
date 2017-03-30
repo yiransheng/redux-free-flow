@@ -17,9 +17,6 @@ test("free monad to represent Nested List", t => {
     Pure : id,
     Impure (xs) {
       return xs.map(recover);
-    },
-    FlatMap () {
-      return resover(free._expand());
     }
   });
   t.deepEqual(array, recover(free));
