@@ -1,0 +1,66 @@
+.acct {
+  flex-grow: 2;
+  border-radius: 4px;
+  overflow: hidden;
+  max-width: 480px;
+  border: 1px solid #444;
+  background-color: #fff; 
+  color: #455A64;
+}
+.aligner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.acct-title {
+  padding: 0.5rem 1rem;
+  background-color: #8BC34A;
+  color: #1B5E20;
+  border-bottom: 1px solid #1B5E20
+}
+.acct-row {
+  display: flex;
+  border-top: 1px solid #ccc;
+  padding: 0.5rem 1rem;
+}
+.acct-row span {
+  display: block;
+  width: 100%;
+}
+.acct-cell {
+  width: 50%;
+  padding: 0.25rem;
+}
+.acct-id {
+  font-size: 0.85rem;
+  color: #222;
+}
+.acct-name {
+  font-weight: lighter;
+  font-size: 1.75rem;
+  font-family: sans-serif;
+}
+.acct-hl {
+  position: absolute;
+  top: -0.65rem;
+  left: -0.75rem;
+  font-size: 0.65rem;
+  text-align:center;
+  padding: 0 0.15rem;
+  border-radius: 2px;
+  max-width: 2rem;
+  text-transform: uppercase;
+  line-height: 0.75rem;
+  height: 0.8rem;
+  background: #222;
+  color: #fff;
+}
+.acct-balance {
+  padding-top: 0.25rem;
+  text-align: right;
+  font-size: 1.75rem;
+  font-weight: 1ighter;
+  color: #222;
+}
