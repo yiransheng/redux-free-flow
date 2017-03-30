@@ -1,5 +1,5 @@
 {
-  "name": "redux-free",
+  "name": "redux-free-flow",
   "version": "0.0.1",
   "description": "Free Monad Action Creators",
   "main": "lib/index.js",
