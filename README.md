@@ -43,6 +43,12 @@ Yes, `dispatch({ type: "ERROR_INSUFFICIENT_FUNDS" })` is pure - it does not disp
     * otherwise, rollback the entire transaction
 * If not enough funds, dispatches an error action `{ type: "ERROR_INSUFFICIENT_FUNDS" }`
 
+# Example
+
+[Demo Link](gusty-houses.surge.sh)
+
+[Source](./examples/bank-accounts)
+
 # How it Works
 
 The inspirations of this enhancer are:
