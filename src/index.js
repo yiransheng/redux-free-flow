@@ -1,16 +1,6 @@
-export {
-  read,
-  dispatch,
-  effect,
-  end
-} from "./dsl"; 
+export { read, dispatch, effect, end, rollback } from "./dsl";
 
-export { 
-  Do,
-  isFree,
-  Pure,
-  Impure
-} from "./free";
+export { Do } from "./free";
 
-import middleware from "./middleware";
-export default middleware;
+import enhancer from "./enhancer";
+export default enhancer;

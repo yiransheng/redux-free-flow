@@ -1,11 +1,23 @@
 import { match } from "single-key";
 import { compose } from "redux";
-import { isFree, Pure, liftFree } from "./free";
+import { isFree, Impure, liftFree } from "./free";
+import { tag, identity } from "./utils";
 
+// -- forall. v, State, Action data DSL a =
+// --    End
+// --  | Rollback
+// --  | Dispatch Action a
+// --  | Read (State -> v) (v -> a)
+// --  | Effect (State -> Promise v) (v -> a)
+
+// make it a Functor
+
+/* eslint no-use-before-define: "off" */
 const DSLPrototype = {
   map(f) {
     return match(this, {
       End: () => End,
+      Rollback: next => Rollback(f(next)),
       Read([select, next]) {
         return Read(select, compose(f, next));
       },
@@ -19,24 +31,19 @@ const DSLPrototype = {
   }
 };
 
-const create = Object.create.bind(Object, DSLPrototype);
-const assign = Object.assign;
-const id = x => x;
+const DSL = tag(DSLPrototype);
 
-const End = assign(create(), { End: true });
+const End = DSL({ End: true });
+const Read = (select, next) => DSL({ Read: [select, next] });
+const Dispatch = (action, next) => DSL({ Dispatch: [action, next] });
+const Effect = (factory, next) => DSL({ Effect: [factory, next] });
+const Rollback = next => DSL({ Rollback: next });
 
-const Read = (select, next) => assign(create(), { Read: [select, next] });
-
-const Dispatch = (action, next) =>
-  assign(create(), { Dispatch: [action, next] });
-
-const Effect = (promiseFactory, next) =>
-  assign(create(), { Effect: [promiseFactory, next] });
-
-const end = Pure(end);
-const read = select => liftFree(Read(select, id));
+const end = Impure(End);
+const read = select => liftFree(Read(select, identity));
 const dispatch = action =>
   isFree(action) ? action : liftFree(Dispatch(action, null));
-const effect = factory => liftFree(Effect(factory, id));
+const effect = factory => liftFree(Effect(factory, identity));
+const rollback = liftFree(Rollback(null));
 
-export { end, read, dispatch, effect };
+export { end, rollback, read, dispatch, effect };

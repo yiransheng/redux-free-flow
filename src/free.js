@@ -1,36 +1,17 @@
 import { match } from "single-key";
 import { compose } from "redux";
+import { tag } from "./utils";
 
 const isFreeSymbol = Symbol("free");
 
+/* eslint no-use-before-define: "off" */
 export const FreePrototype = {
   [isFreeSymbol]: true,
 
   then(f) {
     return match(this, {
       Pure: f,
-      Impure: functor => FlatMap(functor, f),
-      FlatMap([functor, ...fns]) {
-        return FlatMap(functor, ...fns, f);
-      }
-    });
-  },
-  _expand() {
-    return match(this, {
-      Pure: () => this,
-      Impure: () => this,
-      FlatMap([functor, ...fns]) {
-        return Impure(
-          functor.map(val => {
-            let result = val;
-            for (let i = 0; i < fns.length; i++) {
-              result = result.then(fns[i]);
-              result = result._expand();
-            }
-            return result;
-          })
-        );
-      }
+      Impure: functor => Impure(functor.map(x => x.then(f)))
     });
   },
   map(f) {
@@ -38,15 +19,12 @@ export const FreePrototype = {
   }
 };
 
-const create = Object.create.bind(Object, FreePrototype);
-const assign = Object.assign;
+const Free = tag(FreePrototype);
 
-const Pure = val => assign(create(), { Pure: val });
-const Impure = val => assign(create(), { Impure: val });
-const FlatMap = (val, ...fns) => assign(create(), { FlatMap: [val, ...fns] });
+const Pure = value => Free({ Pure: value });
+const Impure = functor => Free({ Impure: functor });
 
 const isFree = value => Object(value) === value && value[isFreeSymbol];
-
 const liftFree = functor => Impure(functor.map(Pure));
 
 const Do = generator => {
