@@ -94,7 +94,7 @@ module.exports = {
       {
         test: /\.(js|jsx)$/,
         loader: 'eslint',
-        include: [paths.appSrc, paths.libSrc]
+        include: paths.appSrc
       }
     ],
     loaders: [
@@ -123,7 +123,7 @@ module.exports = {
       // Process JS with Babel.
       {
         test: /\.(js|jsx)$/,
-        include: paths.appSrc,
+        include: [paths.libSrc, paths.appSrc],
         loader: 'babel',
         
       },
