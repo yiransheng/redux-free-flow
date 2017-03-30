@@ -58,7 +58,7 @@ The inspirations of this enhancer are:
 * `redux-saga` `co` `async-await` etc. 
 * transactional semantics
 
-`dispatch`, `effect`, `rollback` etc are all functions that return data structures which encodes the shape and control flow of effectful computations (`redux` store api calls). In fact, the underlying data structure here is a Free Monad. If you don't know what it is don't worry, they are just immutable objects with `then` method. For example:
+`dispatch`, `effect`, `rollback` etc are all functions that return data structures which encodes the shape and control flow of effectful computations (`redux` store api calls). In fact, the underlying data structure here is a Free Monad. If you don't know what it is don't worry, for the purpose of using these library, they are just immutable objects with `then` method. For example:
 
 ```javascript
 const callDispatch = dispatch({ type: "SOME_ACTION" });
