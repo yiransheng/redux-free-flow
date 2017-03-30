@@ -1,6 +1,8 @@
 {
   "presets": [
-    { "plugins" : ["closure-elimination"] },
     "es2015"
-  ] 
+  ],
+  "plugins" : [
+    "transform-object-rest-spread"
+  ]
 }

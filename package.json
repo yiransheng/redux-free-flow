@@ -28,18 +28,19 @@
   },
   "homepage": "https://github.com/yiransheng/redux-free#readme",
   "dependencies": {
+    "change-emitter": "^0.1.3",
     "single-key": "^1.0.0"
   },
   "devDependencies": {
-    "redux": "^3.6.0",
     "babel-cli": "^6.24.0",
     "babel-core": "^6.0.20",
     "babel-eslint": "^7.1.1",
     "babel-loader": "^6.0.1",
     "babel-plugin-closure-elimination": "^1.1.14",
+    "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "babel-preset-es2015": "^6.0.15",
-    "babel-preset-stage-0": "^6.0.15",
     "babel-register": "6.7.2",
+    "redux": "^3.6.0",
     "rimraf": "2.4.4",
     "tape": "4.5.1"
   }
