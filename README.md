@@ -45,7 +45,7 @@ Yes, `dispatch({ type: "ERROR_INSUFFICIENT_FUNDS" })` is pure - it does not disp
 
 # Example
 
-[Demo Link](gusty-houses.surge.sh)
+[Demo Link](https://gusty-houses.surge.sh)
 
 [Source](./examples/bank-accounts)
 
