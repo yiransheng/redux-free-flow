@@ -101,19 +101,23 @@ test("rollback", t => {
 
 test("compose all dsls with a toy interpreter", t => {
   
-  t.plan(1);
+  t.plan(3);
 
   const mutable = {
+    _mutated : false,
     readCount : 0,
     reads : [1,2,3,4,5,6],
     writes: [],
     read() {
+      this._mutated = true;
       return this.reads[this.readCount++];
     },
     write(v) {
+      this._mutated = true;
       this.writes.push(v); 
     },
     clear() {
+      this._mutated = true;
       this.writes.length = 0;
     }
   };
@@ -127,7 +131,7 @@ test("compose all dsls with a toy interpreter", t => {
           return interpret(next(mutable.read()));
         },
         Dispatch([v, next]) {
-          mutable.writes(v);
+          mutable.write(v);
           return interpret(next);
         },
         Rollback(next) {
@@ -152,7 +156,9 @@ test("compose all dsls with a toy interpreter", t => {
       }
     }
   });
+  t.equal(mutable._mutated, false, "has not been mutated");
+  t.deepEqual(mutable.writes, [], "has not been mutated");
   interpret(commands);
 
-  t.deepEqual(mutable.writes, [10]);
+  t.deepEqual(mutable.writes, [15], "now mutated");
 });
