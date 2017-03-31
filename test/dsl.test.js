@@ -72,3 +72,29 @@ test("dispatch", t => {
   t.deepEqual(actions, [1,2,3]);
 
 });
+
+test("end", t => {
+  t.plan(1);
+  const interpret = (freeDsl) => {
+    return match(freeDsl, {
+      Pure : x => x,
+      Impure : dsl => match(dsl, {
+        End : constant("end")
+      })
+    });
+  }
+  t.equal(interpret(end), "end");
+});
+
+test("rollback", t => {
+  t.plan(1);
+  const interpret = (freeDsl) => {
+    return match(freeDsl, {
+      Pure : x => x,
+      Impure : dsl => match(dsl, {
+        Rollback : constant("rollback")
+      })
+    });
+  }
+  t.equal(interpret(rollback), "rollback");
+});
