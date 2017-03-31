@@ -88,7 +88,7 @@ Kinda. `redux-thunks` gives you the freedom to consult `getState` and do multipl
 
 * `redux-saga`
 
-Think an DSL / interaction / free monad (I haven't come up a name yet...) as a one-time saga. It doesn't have access to actions from other dispatch calls, but the general idea is similar: declarative and compoable async control flows.
+Think an DSL / interaction / free monad (I haven't come up a name yet...) as a one-time saga. It doesn't have access to actions from other dispatch calls, but the general idea is similar: declarative and composable async control flows.
 
 * `redux-loop`
 
@@ -157,7 +157,7 @@ store.dispatch(
 )
 ```
 
-This will dispatche an `DECREMENT` action only if store's `counter` value is positive. `redux` takes `dispatch` out of action creators from `flux`, now I am putting it back in...
+This will dispatch an `DECREMENT` action only if store's `counter` value is positive. `redux` takes `dispatch` out of action creators from `flux`, now I am putting it back in...
 
 ### effect
 
@@ -165,7 +165,7 @@ This will dispatche an `DECREMENT` action only if store's `counter` value is pos
 effect(promiseFactory: () -> Promise A) : Free DSL A
 ```
 
-`effect` takes a function that returns a promise and stores it. When interpreted, the function gets called, and when the promise it returns resolves, the value becomes avaiable to the next `then` function in the DSL chain.
+`effect` takes a function that returns a promise and stores it. When interpreted, the function gets called, and when the promise it returns resolves, the value becomes available to the next `then` function in the DSL chain.
 
 ### end
 
