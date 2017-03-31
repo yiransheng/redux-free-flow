@@ -98,3 +98,61 @@ test("rollback", t => {
   }
   t.equal(interpret(rollback), "rollback");
 });
+
+test("compose all dsls with a toy interpreter", t => {
+  
+  t.plan(1);
+
+  const mutable = {
+    readCount : 0,
+    reads : [1,2,3,4,5,6],
+    writes: [],
+    read() {
+      return this.reads[this.readCount++];
+    },
+    write(v) {
+      this.writes.push(v); 
+    },
+    clear() {
+      this.writes.length = 0;
+    }
+  };
+
+  const interpret = (freeDsl) => {
+    return match(freeDsl, {
+      Pure : x => x,
+      Impure : dsl => match(dsl, {
+        End: x => null,
+        Read([_, next]) {
+          return interpret(next(mutable.read()));
+        },
+        Dispatch([v, next]) {
+          mutable.writes(v);
+          return interpret(next);
+        },
+        Rollback(next) {
+          mutable.clear();
+          return interpret(next);
+        }
+      })
+    });
+  }
+
+  const commands = Do(function* () {
+    let i = -1;
+    let sum = 0;
+    while (true) {
+      i = yield read();
+      sum += i;
+      yield dispatch(sum);
+      if (i > 4) {
+        yield rollback;
+        yield dispatch(sum);
+        break;
+      }
+    }
+  });
+  interpret(commands);
+
+  t.deepEqual(mutable.writes, [10]);
+});
