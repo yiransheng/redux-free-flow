@@ -101,7 +101,7 @@ test("rollback", t => {
 
 test("compose all dsls with a toy interpreter", t => {
   
-  t.plan(3);
+  t.plan(4);
 
   const mutable = {
     _mutated : false,
@@ -160,5 +160,6 @@ test("compose all dsls with a toy interpreter", t => {
   t.deepEqual(mutable.writes, [], "has not been mutated");
   interpret(commands);
 
+  t.equal(mutable.readCount, 5);
   t.deepEqual(mutable.writes, [15], "now mutated");
 });
