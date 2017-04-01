@@ -3,7 +3,7 @@ import { createChangeEmitter } from "change-emitter";
 
 import { isFree } from "./free";
 import { interpreteEventSource as interpreter } from "./interpreters";
-import { noop, isPromise } from "./utils";
+import { uid, noop, isPromise } from "./utils";
 
 const createEventSourceStore = (reducer, preloadedState) => {
   return {
@@ -52,7 +52,7 @@ const createEventSourceStore = (reducer, preloadedState) => {
           return this.status;
         }
       });
-      return this.status.Running.count;
+      return { id: uid(), count: this.status.Running.count };
     },
     rollback(id) {
       const [status, states] = unpack(this.status);
@@ -60,9 +60,15 @@ const createEventSourceStore = (reducer, preloadedState) => {
         return;
       }
       const { actionQueue, startingState } = states;
-      console.log("Removing: ", actionQueue.filter(({ id: aId }) => aId === id).map(({action, id}) => {
-        return [id, action.type, action.payload];
-      }));
+      console.log(
+        "Removing: ",
+        actionQueue.filter(({ id: aId }) => aId === id).map(({
+          action,
+          id
+        }) => {
+          return [id, action.type, action.payload];
+        })
+      );
       const nextQueue = actionQueue.filter(
         ({ id: actionId }) => actionId !== id
       );
@@ -132,9 +138,9 @@ const enhancer = createStore =>
           : mainStoreDispatch(action);
       }
 
-      const id = eventSourceStore.start(mainStore.getState());
+      const { id, count } = eventSourceStore.start(mainStore.getState());
       console.log("TID", id);
-      if (id === 1) {
+      if (count === 1) {
         unlisten = eventSourceStore.listen(() => {
           setMainStoreState(eventSourceStore.getState());
         });

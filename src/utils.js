@@ -11,3 +11,7 @@ export function noop() {}
 export function isPromise(p) {
   return p && Promise.resolve(p) === p;
 }
+let counter = 0;
+export function uid() {
+  return counter++;
+}
