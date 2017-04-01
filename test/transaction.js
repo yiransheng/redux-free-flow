@@ -17,6 +17,7 @@ export default function withServer(server) {
         yield dispatch(deposit(to, amount));
         yield dispatch(withdraw(from, amount));
         const response = yield effect(callServer(from, to, amount));
+        console.log(response, from, to, amount);
         return response === "success" ? end : rollback;
       }
       return end

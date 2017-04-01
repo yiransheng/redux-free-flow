@@ -60,6 +60,9 @@ const createEventSourceStore = (reducer, preloadedState) => {
         return;
       }
       const { actionQueue, startingState } = states;
+      console.log("Removing: ", actionQueue.filter(({ id: aId }) => aId === id).map(({action, id}) => {
+        return [id, action.type, action.payload];
+      }));
       const nextQueue = actionQueue.filter(
         ({ id: actionId }) => actionId !== id
       );
@@ -119,9 +122,6 @@ const enhancer = createStore =>
     const maybeCommit = () => {
       eventSourceStore.commit(finalState => {
         unlisten && unlisten();
-        console.log("++++++++++++++");
-        console.log(finalState);
-        console.log("++++++++++++++");
         setMainStoreState(finalState);
       });
     };
@@ -133,6 +133,7 @@ const enhancer = createStore =>
       }
 
       const id = eventSourceStore.start(mainStore.getState());
+      console.log("TID", id);
       if (id === 1) {
         unlisten = eventSourceStore.listen(() => {
           setMainStoreState(eventSourceStore.getState());

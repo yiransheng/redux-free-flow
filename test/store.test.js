@@ -7,11 +7,13 @@ test("test", t => {
   setup().then(({ store, server }) => {
     setTimeout(
       () => {
-        console.log(store.getState());
-        console.log(server.getState());
-        t.equal(1, 1);
+        const storeState = store.getState();
+        const serverState = server.getState();
+        console.log("store", storeState);
+        console.log("server", serverState);
+        t.deepEqual(storeState, serverState);
       },
-      100
+      1000
     );
   });
 });

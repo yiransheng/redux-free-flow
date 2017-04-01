@@ -19,7 +19,7 @@ function setup() {
     store.dispatch(transaction(from, to, amount));
   });
 
-  return loop.run(5).then(() => {
+  return loop.run(10).then(() => {
     return { store, server }; 
   });
 }

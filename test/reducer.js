@@ -20,7 +20,6 @@ export function reducer(state, action) {
   if (amount <= 0) {
     return state;
   }
-  console.log(action.type, action.payload);
   switch (action.type) {
     case actionTypes.DEPOSIT:
       return { ...state, [payload.id]: state[payload.id] + amount };
@@ -29,7 +28,7 @@ export function reducer(state, action) {
         ? { ...state, [payload.id]: state[payload.id] - amount }
         : state;
     case actionTypes.TRANSFER:
-      return state[payload.from] >= amount
+      return state[payload.from] >= amount && (payload.from !== payload.to)
         ? {
             ...state,
             [payload.from]: state[payload.from] - amount,

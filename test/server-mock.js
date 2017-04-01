@@ -1,6 +1,11 @@
 import { defer, shuffleInPlace } from "./utils";
 
-function createServer(reducer, initialState, loop, errorRate = 0.15) {
+function invariant(state) {
+  return Object.keys(state)
+    .map(k => state[k]).reduce((a,b)=>a+b, 0) === 500;
+}
+
+function createServer(reducer, initialState, loop, errorRate = 0.5) {
   let state = initialState;
   let actionQueue = [];
 
@@ -8,8 +13,8 @@ function createServer(reducer, initialState, loop, errorRate = 0.15) {
     if (Math.random() < errorRate) {
       return false;
     }
-    let prevState = state;
-    state = reducer(state, action);
+    const prevState = state;
+    state = reducer(prevState, action);
     return state !== prevState;
   };
 
