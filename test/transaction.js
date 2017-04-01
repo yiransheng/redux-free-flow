@@ -12,13 +12,14 @@ export default function withServer(server) {
 
   function transaction(from, to, amount) {
     return Do(function*() {
-      const balance = readBalance(from);
+      const balance = yield readBalance(from);
       if (balance >= amount) {
-        yield deposit(to, amount);
-        yield withdraw(from, amount);
+        yield dispatch(deposit(to, amount));
+        yield dispatch(withdraw(from, amount));
         const response = yield effect(callServer(from, to, amount));
-        yield response === "success" ? end : rollback;
+        return response === "success" ? end : rollback;
       }
+      return end
     });
   }
   return transaction;

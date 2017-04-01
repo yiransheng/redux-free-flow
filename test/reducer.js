@@ -15,23 +15,25 @@ export const actionTypes = {
 };
 
 export function reducer(state, action) {
-  const { amount } = action.payload;
+  const { payload = {} } = action;
+  const { amount = 0 } = payload;
   if (amount <= 0) {
     return state;
   }
+  console.log(action.type, action.payload);
   switch (action.type) {
     case actionTypes.DEPOSIT:
-      return { ...state, [action.id]: state[action.id] + amount };
+      return { ...state, [payload.id]: state[payload.id] + amount };
     case actionTypes.WITHDRAW:
-      return state[action.id] >= amount
-        ? { ...state, [action.id]: state[action.id] - amount }
+      return state[payload.id] >= amount
+        ? { ...state, [payload.id]: state[payload.id] - amount }
         : state;
     case actionTypes.TRANSFER:
-      return state[action.from] >= amount
+      return state[payload.from] >= amount
         ? {
             ...state,
-            [action.from]: state[action.from] - amount,
-            [action.to]: state[action.to] + amount
+            [payload.from]: state[payload.from] - amount,
+            [payload.to]: state[payload.to] + amount
           }
         : state;
     default:

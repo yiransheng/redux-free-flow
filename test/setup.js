@@ -13,13 +13,15 @@ function setup() {
   const server = createServer(reducer, getInitialState(), loop);
   const transaction = withServer(server);
   loop.eachTick(() => {
-    const from = Math.floor(Math.random() * 5);
-    const to = Math.floor(Math.random() * 5);
+    const from = Math.floor(Math.random() * 5) + 1;
+    const to = Math.floor(Math.random() * 5) + 1;
     const amount = Math.floor(Math.random() * 100);
     store.dispatch(transaction(from, to, amount));
   });
 
-  return loop.run(40).then(() => store);
+  return loop.run(5).then(() => {
+    return { store, server }; 
+  });
 }
 
 export default setup;
