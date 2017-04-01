@@ -10,7 +10,7 @@ export function getInitialState() {
 
 export const actionTypes = {
   WITHDRAW: "@@client-side/WITHDRAW",
-  DEPOSIT: "@@client-side/DEPOSITE",
+  DEPOSIT: "@@client-side/DEPOSIT",
   TRANSFER: "@@server-side/TRANSFER"
 };
 
