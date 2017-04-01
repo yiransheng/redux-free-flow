@@ -119,6 +119,9 @@ const enhancer = createStore =>
     const maybeCommit = () => {
       eventSourceStore.commit(finalState => {
         unlisten && unlisten();
+        console.log("++++++++++++++");
+        console.log(finalState);
+        console.log("++++++++++++++");
         setMainStoreState(finalState);
       });
     };
