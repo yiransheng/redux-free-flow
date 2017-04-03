@@ -1,5 +1,7 @@
 # redux-free-flow
 
+[![Build Status](https://travis-ci.org/yiransheng/redux-free-flow.svg?branch=master)](https://travis-ci.org/yiransheng/redux-free-flow)
+
 # What it does
 
 It let's you write pure, composable and versatile redux store interactions (both sync and async) like this:
