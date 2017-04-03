@@ -4,7 +4,24 @@ import enhancer from "../src/enhancer";
 import { reducer, getInitialState } from "./reducer";
 import createServer from "./server-mock";
 import withServer from "./transaction";
-import { loopAsync } from "./utils";
+import { defer, loopAsync } from "./utils";
+
+function waitStore(store) {
+  let tid = null;
+  return new Promise(resolve => {
+    const unsub = store.subscribe(() => {
+      tid && clearTimeout(tid);
+      tid = setTimeout(
+        () => {
+          unsub();
+          tid = null;
+          resolve();
+        },
+        2000
+      );
+    });
+  });
+}
 
 function setup() {
   const store = createStore(reducer, getInitialState(), enhancer);
@@ -19,8 +36,8 @@ function setup() {
     store.dispatch(transaction(from, to, amount));
   });
 
-  return loop.run(10).then(() => {
-    return { store, server }; 
+  return Promise.all([loop.run(10), waitStore(store)]).then(() => {
+    return { store, server };
   });
 }
 

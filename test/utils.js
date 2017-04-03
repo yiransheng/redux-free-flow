@@ -23,7 +23,7 @@ export const loopAsync = () => {
   let funcs = [];
   const loop = run => {
     if (run === 0) {
-      return Promise.resolve();
+      return;
     }
 
     // randomize callback running order
