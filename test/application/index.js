@@ -21,7 +21,7 @@ function setup() {
   const store = createStore(reducer, getInitialState(), enhancer);
 
   const loop = loopAsync();
-  const server = createServer(reducer, getInitialState(), loop);
+  const server = createServer(reducer, getInitialState());
   const transaction = withServer(server);
   loop.eachTick(() => {
     const from = Math.floor(Math.random() * 5) + 1;
@@ -29,8 +29,9 @@ function setup() {
     const amount = Math.floor(Math.random() * 100);
     store.dispatch(transaction(from, to, amount));
   });
+  loop.eachTick(server.response);
 
-  return Promise.all([loop.run(20), waitStore(store, 20)]).then(() => {
+  return Promise.all([loop.run(10), waitStore(store, 10)]).then(() => {
     return { store, server };
   });
 }

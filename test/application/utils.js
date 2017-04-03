@@ -26,8 +26,6 @@ export const loopAsync = () => {
       return;
     }
 
-    // randomize callback running order
-    shuffleInPlace(funcs);
     funcs.forEach(f => f());
 
     return Promise.resolve(run - 1).then(loop);

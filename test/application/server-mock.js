@@ -5,7 +5,7 @@ function invariant(state) {
     .map(k => state[k]).reduce((a,b)=>a+b, 0) === 500;
 }
 
-function createServer(reducer, initialState, loop, errorRate = 0.5) {
+function createServer(reducer, initialState, errorRate = 0.5) {
   let state = initialState;
   let actionQueue = [];
 
@@ -24,16 +24,17 @@ function createServer(reducer, initialState, loop, errorRate = 0.5) {
     return deferred.promise;
   };
 
-  loop.eachTick(() => {
+  const response = () => {
     shuffleInPlace(actionQueue);
     while (actionQueue.length) {
       const { deferred, action } = actionQueue.pop();
       deferred.resolve(handleAction(action) ? "success" : "error");
     }
-  });
+  };
 
   return {
     request,
+    response,
     getState() {
       return state;
     }
