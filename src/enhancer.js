@@ -3,7 +3,7 @@ import { createChangeEmitter } from "change-emitter";
 
 import { isFree } from "./free";
 import { interpreteEventSource as interpreter } from "./interpreters";
-import { noop, isPromise } from "./utils";
+import { uid, noop, isPromise } from "./utils";
 
 const createEventSourceStore = (reducer, preloadedState) => {
   return {
@@ -52,7 +52,7 @@ const createEventSourceStore = (reducer, preloadedState) => {
           return this.status;
         }
       });
-      return this.status.Running.count;
+      return { id: uid(), count: this.status.Running.count };
     },
     rollback(id) {
       const [status, states] = unpack(this.status);
@@ -129,8 +129,8 @@ const enhancer = createStore =>
           : mainStoreDispatch(action);
       }
 
-      const id = eventSourceStore.start(mainStore.getState());
-      if (id === 1) {
+      const { id, count } = eventSourceStore.start(mainStore.getState());
+      if (count === 1) {
         unlisten = eventSourceStore.listen(() => {
           setMainStoreState(eventSourceStore.getState());
         });
