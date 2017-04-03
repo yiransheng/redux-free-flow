@@ -1,10 +1,5 @@
 import { defer, shuffleInPlace } from "./utils";
 
-function invariant(state) {
-  return Object.keys(state)
-    .map(k => state[k]).reduce((a,b)=>a+b, 0) === 500;
-}
-
 function createServer(reducer, initialState, errorRate = 0.5) {
   let state = initialState;
   let actionQueue = [];
