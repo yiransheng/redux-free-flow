@@ -1,5 +1,5 @@
 import { withdraw, deposit, transfer, completeTransaction } from "./actions";
-import { Do, end, dispatch, read, effect, rollback } from "../src/index";
+import { Do, end, dispatch, read, effect, rollback } from "../../src/index";
 
 function readBalance(id) {
   return read(state => state[id]);

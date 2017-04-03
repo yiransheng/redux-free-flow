@@ -1,5 +1,5 @@
 import test from "tape";
-import setup from "./setup";
+import setup from "./application";
 
 test("test", {timeout: 5000}, t => {
   t.plan(1);

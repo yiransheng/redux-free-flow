@@ -1,5 +1,5 @@
 import { createStore } from "redux";
-import enhancer from "../src/enhancer";
+import enhancer from "../../src/enhancer";
 
 import { reducer, getInitialState } from "./reducer";
 import createServer from "./server-mock";
