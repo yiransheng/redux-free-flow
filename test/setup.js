@@ -6,19 +6,13 @@ import createServer from "./server-mock";
 import withServer from "./transaction";
 import { defer, loopAsync } from "./utils";
 
-function waitStore(store) {
-  let tid = null;
+function waitStore(store, transactionCount) {
   return new Promise(resolve => {
     const unsub = store.subscribe(() => {
-      tid && clearTimeout(tid);
-      tid = setTimeout(
-        () => {
-          unsub();
-          tid = null;
-          resolve();
-        },
-        2000
-      );
+      if (store.getState().transactionCount >= transactionCount) {
+        unsub();
+        resolve();
+      }
     });
   });
 }
@@ -36,7 +30,7 @@ function setup() {
     store.dispatch(transaction(from, to, amount));
   });
 
-  return Promise.all([loop.run(10), waitStore(store)]).then(() => {
+  return Promise.all([loop.run(20), waitStore(store, 20)]).then(() => {
     return { store, server };
   });
 }

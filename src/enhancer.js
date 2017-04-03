@@ -60,15 +60,6 @@ const createEventSourceStore = (reducer, preloadedState) => {
         return;
       }
       const { actionQueue, startingState } = states;
-      console.log(
-        "Removing: ",
-        actionQueue.filter(({ id: aId }) => aId === id).map(({
-          action,
-          id
-        }) => {
-          return [id, action.type, action.payload];
-        })
-      );
       const nextQueue = actionQueue.filter(
         ({ id: actionId }) => actionId !== id
       );
@@ -139,7 +130,6 @@ const enhancer = createStore =>
       }
 
       const { id, count } = eventSourceStore.start(mainStore.getState());
-      console.log("TID", id);
       if (count === 1) {
         unlisten = eventSourceStore.listen(() => {
           setMainStoreState(eventSourceStore.getState());

@@ -1,5 +1,9 @@
 import { actionTypes } from "./reducer";
 
+export function completeTransaction() {
+  return { type: actionTypes.COMPLETE };
+}
+
 export function withdraw(id, amount) {
   return {
     type: actionTypes.WITHDRAW,

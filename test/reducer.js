@@ -4,11 +4,13 @@ export function getInitialState() {
     "2": 100,
     "3": 100,
     "4": 100,
-    "5": 100
+    "5": 100,
+    transactionCount: 0
   };
 }
 
 export const actionTypes = {
+  COMPLETE: "@@client-side/COMPLETE",
   WITHDRAW: "@@client-side/WITHDRAW",
   DEPOSIT: "@@client-side/DEPOSIT",
   TRANSFER: "@@server-side/TRANSFER"
@@ -17,10 +19,9 @@ export const actionTypes = {
 export function reducer(state, action) {
   const { payload = {} } = action;
   const { amount = 0 } = payload;
-  if (amount <= 0) {
-    return state;
-  }
   switch (action.type) {
+    case actionTypes.COMPLETE:
+      return { ...state, transactionCount: state.transactionCount + 1 };
     case actionTypes.DEPOSIT:
       return { ...state, [payload.id]: state[payload.id] + amount };
     case actionTypes.WITHDRAW:
@@ -28,7 +29,7 @@ export function reducer(state, action) {
         ? { ...state, [payload.id]: state[payload.id] - amount }
         : state;
     case actionTypes.TRANSFER:
-      return state[payload.from] >= amount && (payload.from !== payload.to)
+      return state[payload.from] >= amount && payload.from !== payload.to
         ? {
             ...state,
             [payload.from]: state[payload.from] - amount,

@@ -1,4 +1,4 @@
-import { withdraw, deposit, transfer } from "./actions";
+import { withdraw, deposit, transfer, completeTransaction } from "./actions";
 import { Do, end, dispatch, read, effect, rollback } from "../src/index";
 
 function readBalance(id) {
@@ -17,9 +17,11 @@ export default function withServer(server) {
         yield dispatch(deposit(to, amount));
         yield dispatch(withdraw(from, amount));
         const response = yield effect(callServer(from, to, amount));
-        console.log(response, from, '==>', to, amount);
-        return response === "success" ? end : rollback;
+        if (response !== "success") {
+          yield rollback;
+        } 
       }
+      yield dispatch(completeTransaction());
       return end
     });
   }

@@ -1,15 +1,17 @@
 import test from "tape";
 import setup from "./setup";
 
-
-test("test", t => {
+test("test", {timeout: 5000}, t => {
   t.plan(1);
 
   setup().then(({ store, server }) => {
-    const storeState = store.getState();
-    const serverState = server.getState();
-    console.log("store", storeState);
-    console.log("server", serverState);
-    t.deepEqual(storeState, serverState);
+    const { transactionCount: _, ...storeState } = store.getState();
+    const { transactionCount: __, ...serverState } = server.getState();
+
+    t.deepEqual(
+      storeState,
+      serverState,
+      'store state and "server" state should be consistent.'
+    );
   });
 });
