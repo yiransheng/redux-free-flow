@@ -175,7 +175,7 @@ effect(promiseFactory: () -> Promise A) : Free DSL A
 end :: Free DSL Unit
 ```
 
-The termination of a transaction, `end` is automatically assumed for any chain of commands, it the last one is not `end`.
+The termination of a transaction, `end` is automatically assumed for any chain of commands, if the last one is not `end`.
 
 ### rollback
 
