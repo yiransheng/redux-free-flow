@@ -72,3 +72,5 @@ export type EnhancedStore<S = any, A extends Action = AnyAction> = Store<
 > & { dispatch: ExtDispatch };
 
 declare const enhancer: StoreEnhancer<{ dispatch: ExtDispatch }, {}>;
+
+export = enhancer;
