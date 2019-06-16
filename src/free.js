@@ -14,8 +14,17 @@ export const FreePrototype = {
       Impure: functor => Impure(functor.map(x => x.then(f)))
     });
   },
+  andThen(f) {
+    return match(this, {
+      Pure: f,
+      Impure: functor => Impure(functor.map(x => x.then(f)))
+    });
+  },
   map(f) {
     return this.then(compose(Pure, f));
+  },
+  phantom() {
+    return this;
   }
 };
 
