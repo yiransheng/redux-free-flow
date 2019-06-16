@@ -22,9 +22,6 @@ export const FreePrototype = {
   },
   map(f) {
     return this.then(compose(Pure, f));
-  },
-  phantom() {
-    return this;
   }
 };
 
