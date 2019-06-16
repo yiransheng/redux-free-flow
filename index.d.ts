@@ -8,6 +8,10 @@ interface FreeDSL<S, A, T> {
   map<U>(f: (x: T) => U): FreeDSL<S, A, U>;
 
   then<U>(f: (x: T) => FreeDSL<S, A, U>): FreeDSL<S, A, U>;
+
+  andThen<U>(f: (x: T) => FreeDSL<S, A, U>): FreeDSL<S, A, U>;
+
+  phantom<Ss, As>(this: FreeDSL<unknown, unknown, T>): FreeDSL<Ss, Aa>;
 }
 
 export declare function read<S, A, T>(f: (state: S) => T): FreeDSL<S, A, T>;
@@ -24,8 +28,9 @@ export declare const rollback: FreeDSL<any, any, void>;
 
 export declare function isFree<S, A, T>(val: any): val is FreeDSL<S, A, T>;
 
+// generator Do notation loses pretty much all type safety, unfortunately
 export declare function Do<S, A, T>(
-  generator: () => IterableIterator<FreeDSL<S, A, T>>
+  generator: () => IterableIterator<FreeDSL<unknown, unknown, unknown>>
 ): FreeDSL<S, A, T>;
 
 type ExtDispatch<S = any, A extends Action = AnyAction> = {
