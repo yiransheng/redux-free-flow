@@ -1,74 +1,40 @@
 import { Action, AnyAction, Store, StoreEnhancer, Dispatch } from "redux";
 
-//! DSL Types, DSL is a Functor
+declare const freeM: unique symbol;
 
-type DSL<Next> = End<Next> | Rollback<Next> | Read<Next> | Effect<Next>;
+interface FreeDSL<S, A, T> {
+  [freeM]: true;
 
-// Not a general Functor, only defineds DSL functor map signature
-interface FMap<T> {
-  map<U>(f: (x: T) => U): DSL<U>;
+  map<U>(f: (x: T) => U): FreeDSL<S, A, U>;
+
+  then<U>(f: (x: T) => FreeDSL<S, A, U>): FreeDSL<S, A, U>;
 }
 
-interface End<Next> extends FMap<Next> {
-  End: true;
-}
-interface Rollback<Next> extends FMap<Next> {
-  Rollback: true;
-}
-interface Read<Next> extends FMap<Next> {
-  Read: [<S, T>(state: S) => T, Next];
-}
-interface Effect<Next> extends FMap<Next> {
-  Effect: [<S, T>(state: S) => Promise<T>, Next];
-}
+export declare function read<S, A, T>(f: (state: S) => T): FreeDSL<S, A, T>;
 
-//! Free Monad
+export declare function dispatch<S, A>(action: A): FreeDSL<S, A, void>;
 
-export type FreeDSL<A> = Free<DSL, A>;
+export declare function effect<S, A, T>(
+  factory: () => Promise<T>
+): FreeDSL<S, A, T>;
 
-type Free<F, A> = Pure<F, A> | Impure<F, A>;
+export declare const end: FreeDSL<any, any, void>;
 
-// Not a general Monad, only defineds FreeDSL then, map signature
-interface Monad<T> {
-  map<U>(f: (x: T) => U): FreeDSL<U>;
+export declare const rollback: FreeDSL<any, any, void>;
 
-  then<U>(f: (x: T) => FreeDSL<U>): FreeDSL<U>;
-}
+export declare function isFree<S, A, T>(val: any): val is FreeDSL<S, A, T>;
 
-interface Pure<F, A> extends Monad<A> {
-  Pure: A;
-}
-interface Impure<F, A> extends Monad<A> {
-  Impure: F;
-}
+export declare function Do<S, A, T>(
+  generator: () => IterableIterator<FreeDSL<S, A, T>>
+): FreeDSL<S, A, T>;
 
-//! Store APIs
-
-export declare function read<F extends (...args: any[]) => any>(
-  select: F
-): FreeDSL<ReturnType<F>>;
-
-export declare function dispatch<A extends Action>(action: A): FreeDSL<void>;
-
-export declare function effect<T>(factory: () => Promise<T>): FreeDSL<T>;
-
-export declare const end: FreeDSL<void>;
-
-export declare const rollback: FreeDSL<void>;
-
-export declare function isFree<T = any>(val: any): val is FreeDSL<T>;
-
-export declare function Do<T>(
-  generator: () => IterableIterator<FreeDSL<any>>
-): FreeDSL<T>;
-
-type ExtDispatch<A extends Action = AnyAction> = {
-  (action: A | FreeDSL<void>): void;
+type ExtDispatch<S = any, A extends Action = AnyAction> = {
+  (action: A | FreeDSL<S, A, void>): void;
 };
 
 export type EnhancedStore<S = any, A extends Action = AnyAction> = Store<
   S,
   A
-> & { dispatch: ExtDispatch };
+> & { dispatch: ExtDispatch<S, A> };
 
 export declare const enhancer: StoreEnhancer<{ dispatch: ExtDispatch }, {}>;
